@@ -8,13 +8,17 @@
     <title>Front End Master Test</title>
   </head>
   <body>
-    <weather-state></weather-state>
+    <weather-state>{{vm.weather}}</weather-state>
     <script src="js/angular.min.js"></script>
     <script src="js/app/weatherApp.js"></script>
     <script src="js/app/controllers/WeatherController.js"></script>
     <script src="js/app/directives/WeatherState.js"></script>
     <script src="js/app/factories/WeatherFactory.js"></script>
-
-
+    <script src="js/d3.js"></script>
+    <script>
+        var body = d3.select("body");
+        var div = body.append("div");
+        div.html("Hello, world!");
+    </script>
   </body>
 </html>

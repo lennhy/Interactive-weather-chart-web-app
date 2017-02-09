@@ -9,8 +9,6 @@ function WeatherController(WeatherFactory) {
         vm.weather = object.data.query;
         console.log(vm.weather)
       });
-
-
 }
 
 angular
