@@ -1,6 +1,27 @@
 body{
    background-color: #fff;
+   width:100%;
 }
 
+.chart{
+  width: 100%;
+  height: 5000px;
+  padding: 50px;
+  margin: 60px;
+
+}
+
+/*SHAPES*/
+
+line{
+  stroke: red;
+  stroke-width: 2px;
+}
+
+rect{
+  fill: red;
+}
+
+}
 
 /*media queries*/

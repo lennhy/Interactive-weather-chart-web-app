@@ -9,16 +9,24 @@
   </head>
   <body>
     <weather-state>{{vm.weather}}</weather-state>
+    <div class = "chart"></div>
     <script src="js/angular.min.js"></script>
     <script src="js/app/weatherApp.js"></script>
     <script src="js/app/controllers/WeatherController.js"></script>
     <script src="js/app/directives/WeatherState.js"></script>
     <script src="js/app/factories/WeatherFactory.js"></script>
     <script src="js/d3.js"></script>
-    <script>
-        var body = d3.select("body");
-        var div = body.append("div");
-        div.html("Hello, world!");
-    </script>
+    <!-- <script>
+        // var chart = d3.select("chart")
+        // .style("color", "#fff")
+        // .style("background-color", "#333");
+        // var div = body.append("div")
+        // .style("color", "#0000ff")
+        //
+        // div.html("Hello, world!");
+
+
+    </script> -->
+    <script src="js/shapes.js"></script>
   </body>
 </html>
