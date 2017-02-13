@@ -128,17 +128,27 @@ var dataArray = [
 //       .text(function(d){return d;});
 
 // DAYS
-var d = new Date();
-var weekday = new Array(7);
-weekday[0] =  "Sunday";
-weekday[1] = "Monday";
-weekday[2] = "Tuesday";
-weekday[3] = "Wednesday";
-weekday[4] = "Thursday";
-weekday[5] = "Friday";
-weekday[6] = "Saturday";
+// var d = new Date();
+// var weekday = new Array(7);
+// weekday[0] =  "Sun";
+// weekday[1] = "Mon";
+// weekday[2] = "Tue";
+// weekday[3] = "Wed";
+// weekday[4] = "Thu";
+// weekday[5] = "Fri";
+// weekday[6] = "Sat";
+//
+// var currentDay = weekday[d.getDay()]
 
-var currentDay = weekday[d.getDay()]
+var dataDays = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat"
+]
 
 // Path genertors
 const svg = d3.select(".chart").append("svg")
@@ -149,7 +159,7 @@ var newArr =[];
 var lows =[];
 var dates =[];
 
-var margin = {left:250, right:250, top:600, bottom:0};
+var margin = {left:260, right:260, top:600, bottom:0};
 
 // Create a new array with low temperatures numbers
 dataArray.map(function(x,i){
@@ -160,12 +170,12 @@ dataArray.map(function(x,i){
 
 // Create a new array with low temperatures numbers
 dataArray.map(function(x,i){
-  date = parseInt(x.date)
+  date = parseInt(x.date);
   dates.push(date);
   return dates.sort();
 });
 
-// Create a new array with data
+// Create a new array with  the data that is displayed on the chart
 dataArray.map(function(x,i){
   let obj = {x:parseInt(x.low*2), y:5+(i*15)}
   newArr.push(obj);
@@ -186,15 +196,21 @@ var y = d3.scaleLinear()
 //         .domain([dataArray[0].date.substring(0,2), dataArray[dataArray.length-1].date.substring(0,2)])
 //         .range([lows[lows.length-1], lows[0]]);
 
-var x = d3.scaleLinear()
-        .domain(d3.extent(dates))
-        .range([0,width]);
+// var x = d3.scaleLinear()
+//         .domain(d3.extent(dates))
+//         .range([0,width]);
 // var x = d3.scaleTime()
 //         .domain([0,d3.max(dataArray)])
 //         .range(0, lows[lows.length-1],0);
 
 
+var x = d3.scalePoint()
+        .domain(dataDays)
+        .range([0, 550]);
+
 var yAxis = d3.axisLeft(y);
+var xAxis = d3.axisBottom(x);
+
 
 
 // svg line is an elements d3 line is a generator
@@ -203,6 +219,7 @@ var line = d3.line()
         .y(function(d){return d.y*4;})
         .curve(d3.curveCardinal);
 
+// Path
 svg.append("path")
         .attr("fill", "none")
         .attr("stroke", "blue")
@@ -220,3 +237,19 @@ svg.selectAll("circle.first")
                 .attr("cy", function(d){return d.y*4;})
                 .attr("r", 4)
                 .attr("transform", "translate("+margin.left+","+margin.top+") rotate(270)");
+console.log(y(0));
+console.log(y(90));
+console.log(y(180));
+
+var chartGroup = svg.append("g");
+
+chartGroup.append("path").attr("d", line(lows))
+svg.append("g")
+          .attr("class", "axis y")
+          .attr("transform", "translate(260, 0)")
+          .call(yAxis);
+
+chartGroup.append("g")
+          .attr("class", "axis x")
+          .attr("transform", "translate(260, 200)")
+          .call(xAxis);
