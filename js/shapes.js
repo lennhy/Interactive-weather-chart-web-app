@@ -140,6 +140,10 @@ var dataArray = [
 //
 // var currentDay = weekday[d.getDay()]
 
+
+
+// ---------------------------------- VARIABLES
+
 var dataDays = [
   "Sun",
   "Mon",
@@ -150,106 +154,103 @@ var dataDays = [
   "Sat"
 ]
 
-// Path genertors
-const svg = d3.select(".chart").append("svg")
-  .attr("height", "100%")
-  .attr("width","100%")
-
-var newArr =[];
+var height= 200;
+var width = 500;
+var formattedDataArray =[];
 var lows =[];
 var dates =[];
 
 var margin = {left:260, right:260, top:600, bottom:0};
 
-// Create a new array with low temperatures numbers
+// Low temperatures numbers array
 dataArray.map(function(x,i){
   let lowTemp = parseInt(x.low)
   lows.push(lowTemp);
   return lows.sort();
 });
 
-// Create a new array with low temperatures numbers
+// Date numbers array
 dataArray.map(function(x,i){
   date = parseInt(x.date);
   dates.push(date);
   return dates.sort();
 });
 
-// Create a new array with  the data that is displayed on the chart
+// Organize all Data accordingly to be displayed on the chart
 dataArray.map(function(x,i){
-  let obj = {x:parseInt(x.low*2), y:5+(i*15)}
-  newArr.push(obj);
+  let obj = {x:i, y:parseInt(x.low)}
+  formattedDataArray.push(obj);
 });
 
-var height= 200;
-var width = 500;
-// Create scale
-// var y = d3.scaleLinear()
-//         .domain([0,d3.max(dataArray)])
-        // .range(lows[lows.length-1],0);
 
+
+// ---------------------------------- PATH GENERATOR
+
+// Create an SVG Path
+var svg = d3.select(".chart").append("svg")
+  .attr("height", "100%")
+  .attr("width","100%");
+
+//  Append a group called g
+var chartGroup = svg.append("g").attr("transform", "translate(260, 0)");
+
+//  Create d3 line generator
+var line = d3.line()
+        .x(function(d, i){return d.x*15;})
+        .y(function(d, i){return d.y*15;})
+        .curve(d3.curveCardinal);
+
+// Execute the Path line
+chartGroup.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "blue")
+        .attr("d", line(formattedDataArray))
+        // .attr("transform", "translate("+margin.left+","+margin.top+") rotate(270)");
+
+
+
+// ---------------------------------- SVG CIRCLE NODES
+
+// Circular  Nodes on path
+chartGroup.selectAll("circle.first")
+         // binds data to elements
+         .data(formattedDataArray)
+         // compares the data we have on the page with our source data
+         .enter().append("circle")
+                .style("fill", "blue")
+                .attr("class", "first")
+                .attr("cx", function(d, i){return d.x*15;})
+                .attr("cy", function(d, i){return d.y*15;})
+                .attr("r", 2);
+                // .attr("transform", "translate("+margin.left+","+margin.top+") rotate(270)");
+
+
+
+// ---------------------------------- X AXIS Y AXIS SCALE
+
+// Scale bars
 var y = d3.scaleLinear()
         .domain(d3.extent(lows))
         .range([height,0]);
 
-// var x = d3.scaleLinear()
-//         .domain([dataArray[0].date.substring(0,2), dataArray[dataArray.length-1].date.substring(0,2)])
-//         .range([lows[lows.length-1], lows[0]]);
-
-// var x = d3.scaleLinear()
-//         .domain(d3.extent(dates))
-//         .range([0,width]);
-// var x = d3.scaleTime()
-//         .domain([0,d3.max(dataArray)])
-//         .range(0, lows[lows.length-1],0);
-
-
 var x = d3.scalePoint()
         .domain(dataDays)
-        .range([0, 550]);
+        .range([0, width]);
 
 var yAxis = d3.axisLeft(y);
 var xAxis = d3.axisBottom(x);
 
 
 
-// svg line is an elements d3 line is a generator
-var line = d3.line()
-        .x(function(d){return d.x*6;})
-        .y(function(d){return d.y*4;})
-        .curve(d3.curveCardinal);
+// ---------------------------------- GROUPS
 
-// Path
-svg.append("path")
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("d", line(newArr))
-        .attr("transform", "translate("+margin.left+","+margin.top+") rotate(270)");
-
-//  nodes on path
-svg.selectAll("circle.first")
-         // binds data to elements
-         .data(newArr)
-         .enter().append("circle") // compares the data we have on the page with our source data
-                .style("fill", "red")
-                .attr("class", "first")
-                .attr("cx", function(d){return d.x*6;})
-                .attr("cy", function(d){return d.y*4;})
-                .attr("r", 4)
-                .attr("transform", "translate("+margin.left+","+margin.top+") rotate(270)");
-console.log(y(0));
-console.log(y(90));
-console.log(y(180));
-
-var chartGroup = svg.append("g");
-
-chartGroup.append("path").attr("d", line(lows))
+// chartGroup.append("path").attr("d", line(lows))
 svg.append("g")
           .attr("class", "axis y")
           .attr("transform", "translate(260, 0)")
           .call(yAxis);
 
-chartGroup.append("g")
+svg.append("g")
           .attr("class", "axis x")
           .attr("transform", "translate(260, 200)")
           .call(xAxis);
