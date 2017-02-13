@@ -6,8 +6,8 @@ body{
 .chart{
   width: 100%;
   height: 5000px;
-  padding: 50px;
-  margin: 60px;
+  padding: 0;
+  margin: 0;
 
 }
 

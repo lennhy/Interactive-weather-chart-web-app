@@ -9,13 +9,15 @@
   </head>
   <body>
     <weather-state>{{vm.weather}}</weather-state>
-    <div class = "chart"></div>
+    <chart></chart>
     <script src="js/angular.min.js"></script>
     <script src="js/app/weatherApp.js"></script>
+    <script src="js/d3.js"></script>
     <script src="js/app/controllers/WeatherController.js"></script>
     <script src="js/app/directives/WeatherState.js"></script>
+    <script src="js/app/directives/chart.js"></script>
+
     <script src="js/app/factories/WeatherFactory.js"></script>
-    <script src="js/d3.js"></script>
     <!-- <script>
         // var chart = d3.select("chart")
         // .style("color", "#fff")
