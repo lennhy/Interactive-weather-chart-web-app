@@ -180,11 +180,25 @@ var y = d3.scaleLinear()
       .range([height,0]);
 
 var x = d3.scalePoint()
-      .domain(days)
-      .range([0, width]);
+
+      .domain(updateToCurrentDay(days))
+      .range([0, width])
+
+
+
 
 var yAxis = d3.axisLeft(y);
 var xAxis = d3.axisBottom(x);
+
+// display the day on chart matching today as the to current day
+function updateToCurrentDay(daysOfTheWeek){
+    for(let i=0; i<days.length; i++) {
+      if(daysOfTheWeek[i]==currentDay){
+        daysOfTheWeek[i] = "Today"
+      }
+    }
+    return daysOfTheWeek;
+}
 
 
 // ---------------------------------- GROUPS
