@@ -8,27 +8,44 @@
     <title>Front End Master Test</title>
   </head>
   <body>
-    <weather-state>{{vm.weather}}</weather-state>
-    <chart></chart>
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            <h3><li class="list-group-item">{{vm.currentWeather.item.title}}</li></h3>
+            <li class="list-group-item">{{vm.currentWeather.location.country}}, {{vm.currentWeather.location.city}}, {{vm.currentWeather.location.region}}</li>
+            <li class="list-group-item"> {{vm.currentWeather.item.condition.temp}} {{vm.currentWeather.units.temperature}}  </li>
+            <li class="list-group-item">{{vm.currentWeather.item.condition.text}}</li>
+            <!-- <li class="list-group-item">High:{{vm.currentWeather.item.condition.text}}</li>
+            <li class="list-group-item">Low: {{vm.currentWeather.item.condition.text}}</li> -->
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <button id="more-data" ng-click="vm.toggle()">Show More</button>
+            <ul class="list-group" id="more-data-container">
+              <li class="list-group-item">Wind Speed: {{vm.currentWeather.wind.speed}}</li>
+              <li class="list-group-item">Humidity: {{vm.currentWeather.atmosphere.humidity}}</li>
+              <li class="list-group-item">Sunrsie: {{vm.currentWeather.astronomy.sunrise}}</li>
+              <li class="list-group-item">Sunset: {{vm.currentWeather.astronomy.sunrise}}</li>
+            </ul>
+        </div>
+      </div>
+
+      <chart></chart>
+
+
+    </div>
     <script src="js/angular.min.js"></script>
     <script src="js/app/weatherApp.js"></script>
     <script src="js/d3.js"></script>
     <script src="js/app/controllers/WeatherController.js"></script>
-    <script src="js/app/directives/WeatherState.js"></script>
     <script src="js/app/directives/chart.js"></script>
-
-    <script src="js/app/factories/WeatherFactory.js"></script>
-    <!-- <script>
-        // var chart = d3.select("chart")
-        // .style("color", "#fff")
-        // .style("background-color", "#333");
-        // var div = body.append("div")
-        // .style("color", "#0000ff")
-        //
-        // div.html("Hello, world!");
-
-
-    </script> -->
+    <script src="js/app/services/WeatherService.js"></script>
     <script src="js/shapes.js"></script>
   </body>
 </html>
