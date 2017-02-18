@@ -5,7 +5,7 @@ An AngularJS focused take home test for Front-end Developers.
 + Clone this repo
 + Complete this exercise and submit either a zip of the solution or a link to a new repo
 + Please incorporate the included `angular.min.js` (Angular 1.5.8) framework into your solution. All other choices of libraries, frameworks, etc. are up to you.
-
+## run server python -m SimpleHTTPServer to start the app
 ## Requirements
 + Solution should be responsive
 + Use the the included `weather.json` file as your datasource (sample data from [Yahoo's Weather API](https://developer.yahoo.com/weather/))

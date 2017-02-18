@@ -1,8 +1,6 @@
 function WeatherController(WeatherService) {
 var vm = this;
 var url = 'js/weather.json';
-var currentDay = new Date().toString().substring(0,3);
-console.log(currentDay);
 // -------------------GET DATA VIA HTTP REQUEST
 
 WeatherService
@@ -13,17 +11,11 @@ WeatherService
     vm.weatherForcast = obj.data.query.results.channel.item.forecast;
     returnData(vm.weatherForcast);
   });
-
-// ------------------------TOGGLE FUNCTION
-
-vm.toggle = function(){
-
   let moreData= document.getElementById("more-data-container");
-  if(moreData.style.display == "none"){
-    moreData.style.display = "block";
-  }else{
-    moreData.style.display = "none";
-  }
+  moreData.style.display = "";
+// ------------------------TOGGLE FUNCTION
+vm.toggle = function(){
+  vm.showMore = !vm.showMore;
 }
 
 var height= 500;
@@ -180,7 +172,6 @@ var y = d3.scaleLinear()
       .range([height,0]);
 
 var x = d3.scalePoint()
-
       .domain(updateToCurrentDay(days))
       .range([0, width])
 
@@ -192,9 +183,10 @@ var xAxis = d3.axisBottom(x);
 
 // display the day on chart matching today as the to current day
 function updateToCurrentDay(daysOfTheWeek){
+    var currentDay = new Date().toString().substring(0,3);
     for(let i=0; i<days.length; i++) {
       if(daysOfTheWeek[i]==currentDay){
-        daysOfTheWeek[i] = "Today"
+        daysOfTheWeek[i] = "Today";
       }
     }
     return daysOfTheWeek;

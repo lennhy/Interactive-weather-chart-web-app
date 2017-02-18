@@ -27,7 +27,7 @@
       <div class="row">
         <div class="col-md-12">
           <button type="button" class="btn btn-secondary" id="more-data" ng-click="vm.toggle()">Show More</button>
-            <ul class="list-group" id="more-data-container">
+            <ul class="list-group" id="more-data-container" ng-class="{active:vm.showMore}">
               <li class="list-group-item">Wind Speed: {{vm.currentWeather.wind.speed}}</li>
               <li class="list-group-item">Humidity: {{vm.currentWeather.atmosphere.humidity}}</li>
               <li class="list-group-item">Sunrsie: {{vm.currentWeather.astronomy.sunrise}}</li>
