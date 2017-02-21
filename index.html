@@ -10,7 +10,17 @@
   <body>
 
     <div class="container-fluid">
-
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+              <form ng-submit="vm.submitLocal(vm.input)">
+                <label for="usr">Type Zip Code:</label>
+                <input type="text" class="form-control" name="vm.input" ng-model="vm.input">
+                <input type="submit"/>
+              </form>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-12">
           <ul class="list-group">
@@ -47,5 +57,6 @@
     <script src="js/app/directives/chart.js"></script>
     <script src="js/app/services/WeatherService.js"></script>
     <script src="js/shapes.js"></script>
+
   </body>
 </html>
