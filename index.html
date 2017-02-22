@@ -12,13 +12,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <div class="form-group">
-              <form ng-submit="vm.submitLocal(vm.input)">
+          <form ng-submit="vm.submitLocal(vm.input)">
+              <div class="form-group">
                 <label for="usr">Type Zip Code:</label>
                 <input type="text" class="form-control" name="vm.input" ng-model="vm.input">
-                <input type="submit"/>
-              </form>
-          </div>
+                <button type="submit" class="btn btn-secondary">Submit</button>
+              </div>
+          </form>
         </div>
       </div>
       <div class="row">

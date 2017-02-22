@@ -1,6 +1,6 @@
 function WeatherController(WeatherService) {
 var vm = this;
-var url="";
+var url;
 vm.input = "newyork, us";
 
 // Change the input value when user types in a zip code
@@ -17,10 +17,12 @@ function start(){
   WeatherService
   .httpGetWeatherByState(url)
     .then(function (obj){
-      console.log(obj.data);
+      // console.log(obj.data);
       vm.currentWeather =  obj.data.query.results.channel;
       vm.weatherForcast = obj.data.query.results.channel.item.forecast;
       returnData(vm.weatherForcast);
+      console.log(vm.weatherForcast);
+
     });
     let moreData= document.getElementById("more-data-container");
     moreData.style.display = "";
@@ -31,26 +33,30 @@ function start(){
   }
 
   var height= 500;
-  var width = 500;
+  var width = 360;
   var formattedDataArrayLows =[];
   var formattedDataArrayHighs=[];
-  var margin = {left:0, right:260, top:-200, bottom:0};
+  var margin = {left:0, right:260, top:-120, bottom:0};
 
   // --------------------------PREP DATA
 
-  function returnData(arr){
+  function returnData(weatherData){
+    weatherData.splice(7,3);
+    console.log(weatherData);
 
       var lows =[];
       var highs =[];
       var dates =[];
       var days =[];
 
-      arr.map(function(x,i){
+      weatherData.map(function(x,i){
+        console.log(x,i);
+          // Low temperatures
           let lowTemp = parseInt(x.low)
           lows.push(lowTemp);
           lows.sort();
 
-          // high temperatures numbers array
+          // High temperatures numbers array
           let highTemp = parseInt(x.high)
           highs.push(highTemp);
           highs.sort();
@@ -74,6 +80,7 @@ function start(){
 
 
       });
+      console.log(weatherData);
 
 
 
@@ -91,13 +98,13 @@ function start(){
   //  Create d3 line generator
    line = d3.line()
         .x(function(d, i){return d.x*60;})
-        .y(function(d, i){return d.y*15;})
+        .y(function(d, i){console.log(d.y*10);  return d.y*10;})
         .curve(d3.curveCardinal);
 
   //  Create d3 line generator
    lineTwo = d3.line()
         .x(function(d, i){return d.x*60;})
-        .y(function(d, i){return d.y*15;})
+        .y(function(d, i){return d.y*10;})
         .curve(d3.curveCardinal);
 
 
@@ -113,7 +120,7 @@ function start(){
         .attr("fill", "none")
         .attr("stroke", "#00cc00")
         .attr("d", lineTwo(formattedDataArrayHighs))
-        .attr("transform", "translate(0,-400)");
+        .attr("transform", "translate(0,-270)");
 
 
   // ---------------------------------- SVG CIRCLE NODES AND TOOLTIP EVENT
@@ -130,11 +137,11 @@ function start(){
               .style("fill", "#007acc")
               .attr("class", "first")
               .attr("cx", function(d, i){return d.x*60;})
-              .attr("cy", function(d, i){return d.y*15;})
+              .attr("cy", function(d, i){return d.y*10;})
               .attr("r", 5)
               .attr("transform", "translate("+margin.left+","+margin.top+")")
               chartGroup.selectAll("circle.first")
-                    .data(arr)
+                    .data(weatherData)
                     .on("mouseover", function(d) {
                               tooltip
                              .style("opacity", 1)
@@ -144,7 +151,7 @@ function start(){
                    .on("mouseout", function(d) {
                      tooltip
                        .style("opacity", 0).text(d.day + ", "+ d.low +", " + d.text)
-                       console.log(d);
+                      //  console.log(d);
                     });
 
 
@@ -157,21 +164,23 @@ function start(){
               .style("fill", "#00cc00")
               .attr("class", "second")
               .attr("cx", function(d, i){return d.x*60;})
-              .attr("cy", function(d, i){return d.y*15;})
+              .attr("cy", function(d, i){return d.y*10;})
               .attr("r", 5)
-              .attr("transform", "translate(0,-400)");
+              .attr("transform", "translate(0,-270)");
               chartGroup.selectAll("circle.second")
-                    .data(arr)
+                    .data(weatherData)
                     .on("mouseover", function(d) {
                               tooltip
                              .style("opacity", 1)
                              .style("left", (d3.event.pageX) + "px")
-                             .style("top", (d3.event.pageY - 28) + "px");})
+                             .style("top", (d3.event.pageY - 28) + "px")
+                             .text(d.day + ", "+ d.high +", " + d.text);
+                           })
 
                    .on("mouseout", function(d) {
                      tooltip
-                       .style("opacity", 0).text(d.day + ", "+ d.high +", " + d.text)
-                       console.log(d);
+                       .style("opacity", 0)
+                      //  console.log(d);
                     });
 
 
