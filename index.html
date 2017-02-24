@@ -12,11 +12,26 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item"><h1>WeatherChart</h2></li>
+            </ul>
+        </div>
+      </divc
+      <div class="row">
+        <div class="col-md-12">
           <form ng-submit="vm.submitLocal(vm.input)">
               <div class="form-group">
-                <label for="usr">Type Zip Code:</label>
-                <input type="text" class="form-control" name="vm.input" ng-model="vm.input">
-                <button type="submit" class="btn btn-secondary">Submit</button>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <label for="zip">Type Zip Code:</label>
+                  </li>
+                  <li class="list-group-item">
+                    <input type="text" id="zip" class="form-control" name="vm.input" ng-model="vm.input">
+                  </li>
+                  <li class="list-group-item">
+                    <button type="submit" class="btn btn-secondary">Submit</button>
+                  </li>
+                </ul>
               </div>
           </form>
         </div>
