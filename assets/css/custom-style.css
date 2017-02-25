@@ -10,7 +10,6 @@ body{
 .jumbotron{
   width: 100%;
   margin: 0px 0px 20px 0px;
-  /*padding: 10px;*/
   background:rgba(106, 82, 160, .4);
   color: #fff;
   box-shadow: 0 1px 1px -1px #A2A2A2;
@@ -157,10 +156,10 @@ rect{
 
 div.tooltip {
   position: absolute;
-  padding: 7px;
+  padding: 15px;
   color: #fff;
   text-align: center;
-  width: 60px;
+  /*width: 60px;*/
   height: auto;
   font: 12px sans-serif;
   background: #333;
