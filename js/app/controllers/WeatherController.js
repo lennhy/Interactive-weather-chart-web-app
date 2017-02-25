@@ -12,6 +12,20 @@ function WeatherController(WeatherService) {
     start();
   }
 
+  function getEvent(action, string, input){
+    input.addEventListener(action, function(event){
+      if (action){
+        input.value = string;
+      }
+    }, false);
+  }
+
+
+  var input = document.getElementById('zip');
+  getEvent("focus", " ", input);
+  getEvent("blur",  "Enter Zip code or City, Country....", input);
+
+
   // when window loads default location to new york
   Window.onload = start();
   vm.input = "Enter Zip code or City, Country...."

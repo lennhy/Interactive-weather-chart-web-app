@@ -2,32 +2,32 @@
 
 body{
    width:100%;
-   margin: 0;
-   padding: 0;
+   margin: 0;`
+   padding: 0;`
    background-color: rgba(179, 175, 241, .1);
-}
-
-.jumbotron{
-  width: 100%;
-  margin: 0px 0px 20px 0px;
-  background:rgba(106, 82, 160, .4);
-  color: #fff;
-  box-shadow: 0 1px 1px -1px #A2A2A2;
-
+   font-family: 'Dosis', sans-serif;
 }
 
 /*---------------------------------HEADERS*/
 
-h3{
-  padding: 20px 0 20px 60px;
-  width: 600px;
-  margin: 0 auto;
+.jumbotron{
+  width: 100%;
+  padding:0px;
+  margin: 0px 0px 20px 0px;
+  color: #4184f3;
+  box-shadow: 0 1px 1px -1px #A2A2A2;
+  background: transparent;
+  font-weight: bold;
+}
+
+h2{
+  padding: 10px 0 30px 30px;
+  margin-left: 60px;
 
 }
 
 .header h3{
   color: #262626;
-  padding-bottom: 30px;
   background: #fff;
   box-shadow: 0 1px 1px -1px #A2A2A2;
 }
@@ -35,7 +35,7 @@ h3{
 /*-------------------------------------NAVBAR*/
 
 .navbar {
-  background-color: rgba(106, 82, 160, 1);
+  background-color:#333;
   padding: 30px;
   border-radius: 0;
   margin: 0px;
@@ -49,15 +49,21 @@ h3{
   line-height: 0px;
   padding: 30px;
   border: 4px solid #fff;
+  margin-left:60px;
 }
 
 .navbar .form-control{
   display: inline-block;
-  color: #D4D4D4;
+  color: #fff;
   width: 600px;
   height: 50px;
   margin-bottom: 10px;
   margin: 0;
+  background-color: transparent;
+  /*border: none;*/
+  /*border-radius: 0;*/
+  box-shadow: none;
+  border: 2px solid rgb(255, 255, 255);
 }
 
 /*------------------------------LISTS*/
@@ -70,7 +76,7 @@ ul li.list-group-item{
   border: none;
   box-shadow: 0 1px 1px -1px #A2A2A2;
   display: inline-block;
-  color: #585858;
+  color: #4184f3;
   font-weight: bold;
 }
 
@@ -93,22 +99,33 @@ span.header{
   text-align: center;
 }
 
-.btn{
+button.btn.btn-outline{
   background-color: transparent;
   width: 100px;
   height: 50px;
   color: #fff;
   font-weight: bold;
-  border: 2px solid #fff;
+  border: none;
+  /*border-radius: 0;*/
+  /*border-bottom: 2px solid #fff;*/
+}
+
+button.btn.btn-outline:hover{
+  background:#4184f3;
 }
 
 button.btn-secondary{
   height: 60px;
   width: 200px;
   margin: 0;
-  background-color: #ea4c89;
+  color: #fff;
+  background-color: #4184f3;
 }
-
+button.btn-secondary:hover{
+  background-color: #2574f7;
+  color: #fff;
+  border: none;
+}
 /*------------------------------CHART----------------------*/
 
 .chart{
@@ -120,7 +137,6 @@ button.btn-secondary{
   border-radius: 7px;
   background-color: #fff;
   border-radius: 7px;
-  box-shadow: 0 2px 2px -2px #A2A2A2;
 }
 
 .axis path,
@@ -173,7 +189,7 @@ ul#more-data-container{
 }
 ul.active#more-data-container{display: block;}
 
-
+/*=========================================================STOP*/
 @media only screen and (max-width: 500px) {
 
 /*Mobile Screens*/
@@ -195,20 +211,10 @@ body{
   color: #333;
 }
 
-input[placeholder]{
-  color: grey;
-  margin-bottom: 10px;
-}
-
 ul li.list-group-item{
-  padding: 35px;
+  padding: 20px;
   text-align: center;
 }
-
-div.jumbotron{
-  width: 100%;
-  background-color: transparent;
-  text-align: center;
 
 /*------------------------------CHART----------------------*/
 .chart{
