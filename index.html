@@ -2,35 +2,30 @@
 <html ng-app="weatherApp">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="assets/css/custom-style.css">
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/custom-style.css">
 
     <title>Front End Master Test</title>
   </head>
   <body>
-
-    <div class="container-fluid">
+    <nav class="navbar navbar">
+      <a class="navbar-brand">Rain</a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline" ng-submit="vm.submitLocal(vm.input)">
+          <input type="text" id="zip" class="form-control" name="vm.input" ng-model="vm.input" placeholder="Type Zip Code:">
+          <button class="btn btn-outline" type="submit">Submit</button>
+        </form>
+      </div>
+    </nav>
+    <div class="jumbotron"><h3>{{vm.currentWeather.item.title}}</h3></div>
+    <div class="container">
       <div class="row">
         <div class="col-md-12">
-            <ul class="list-group">
-                <li class="list-group-item"><h1>WeatherChart</h2></li>
-            </ul>
-        </div>
-      </divc
-      <div class="row">
-        <div class="col-md-12">
-          <form ng-submit="vm.submitLocal(vm.input)">
+          <form id="mobile-form" ng-submit="vm.submitLocal(vm.input)">
               <div class="form-group">
                 <ul class="list-group">
-                  <li class="list-group-item">
-                    <label for="zip">Type Zip Code:</label>
-                  </li>
-                  <li class="list-group-item">
-                    <input type="text" id="zip" class="form-control" name="vm.input" ng-model="vm.input">
-                  </li>
-                  <li class="list-group-item">
+                    <input type="text" id="zip" class="form-control" name="vm.input" ng-model="vm.input" placeholder="Type Zip Code:">
                     <button type="submit" class="btn btn-secondary">Submit</button>
-                  </li>
                 </ul>
               </div>
           </form>
@@ -39,7 +34,6 @@
       <div class="row">
         <div class="col-md-12">
           <ul class="list-group">
-            <h3><li class="list-group-item">{{vm.currentWeather.item.title}}</li></h3>
             <li class="list-group-item">{{vm.currentWeather.location.country}}, {{vm.currentWeather.location.city}}, {{vm.currentWeather.location.region}}</li>
             <li class="list-group-item"> {{vm.currentWeather.item.condition.temp}} {{vm.currentWeather.units.temperature}}  </li>
             <li class="list-group-item">{{vm.currentWeather.item.condition.text}}</li>
@@ -55,8 +49,8 @@
             <ul class="list-group" id="more-data-container" ng-class="{active:vm.showMore}">
               <li class="list-group-item">Wind Speed: {{vm.currentWeather.wind.speed}}</li>
               <li class="list-group-item">Humidity: {{vm.currentWeather.atmosphere.humidity}}</li>
-              <li class="list-group-item">Sunrsie: {{vm.currentWeather.astronomy.sunrise}}</li>
-              <li class="list-group-item">Sunset: {{vm.currentWeather.astronomy.sunrise}}</li>
+              <li class="list-group-item">Sunrise: {{vm.currentWeather.astronomy.sunrise}}</li>
+              <li class="list-group-item">Sunset: {{vm.currentWeather.astronomy.sunset}}</li>
             </ul>
         </div>
       </div>
