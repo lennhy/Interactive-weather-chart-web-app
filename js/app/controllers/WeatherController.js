@@ -143,7 +143,7 @@ function WeatherController(WeatherService, $scope) {
                   .attr("cx",360)
                   .attr("cy",-50)
                   .attr("r", 5);
-                  
+
       chartGroup.append("text")
                    .attr("class", "text")
                    .attr("x", 280)
@@ -247,12 +247,12 @@ function WeatherController(WeatherService, $scope) {
 
       // chartGroup.append("path").attr("d", line(lows))
       svg.append("g")
-              .attr("class", "axis y")
+              .attr("class", "axis-y")
               .attr("transform", "translate(60, 0)")
               .call(yAxis);
 
       svg.append("g")
-              .attr("class", "axis x")
+              .attr("class", "axis-x")
               .attr("transform", "translate(60, 400)")
               .call(xAxis);
       }
