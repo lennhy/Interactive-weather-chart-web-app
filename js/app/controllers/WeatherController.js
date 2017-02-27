@@ -11,26 +11,28 @@ function WeatherController(WeatherService, $scope) {
     start();
   }
 
-  // when window loads default location to new york
+  // When window loads default location to new york
   Window.onload = start();
+
   vm.input = " "
+
   function start(){
     url = `http://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`
     WeatherService
     .httpGetWeatherByState(url)
       .then(function (obj){
-        // // console.log(obj.data);
         if(obj !== null){
           vm.currentWeather =  obj.data.query.results.channel;
           vm.weatherForcast = obj.data.query.results.channel.item.forecast;
           returnData(vm.weatherForcast);
-          // console.log(vm.weatherForcast);
         }
       });
+
       let moreData= document.getElementById("more-data-container");
       moreData.style.display = "";
 
-    // ------------------------TOGGLE FUNCTION
+
+    // --------------------------------------TOGGLE FUNCTION
 
     vm.toggle = function(){
       vm.showMore = !vm.showMore;
@@ -39,11 +41,11 @@ function WeatherController(WeatherService, $scope) {
     var formattedDataArrayLows =[];
     var formattedDataArrayHighs=[];
 
-    // --------------------------PREP DATA
+
+    // -----------------------------------------PACKAGE DATA
 
     function returnData(weatherData){
       weatherData.splice(7,3);
-      // console.log(weatherData);
 
         var lows =[];
         var highs =[];
@@ -51,7 +53,6 @@ function WeatherController(WeatherService, $scope) {
         var days =[];
 
         weatherData.map(function(x,i){
-          // console.log(x,i);
             // Low temperatures
             let lowTemp = parseInt(x.low)
             lows.push(lowTemp);
@@ -79,184 +80,187 @@ function WeatherController(WeatherService, $scope) {
             obj = {x:i, y:parseInt(x.high)}
             formattedDataArrayHighs.push(obj);
 
-        });
-        // console.log(weatherData);
-        console.log(formattedDataArrayHighs);
+      });
+
+      console.log(formattedDataArrayHighs);
+
 
     // ---------------------------------- CREATE CHART PATH GENERATOR
-function resizeChart(){
-    var tooltip = d3.select("chart").append("div")
-                  .attr("class", "tooltip")
-                  .style("opacity", 0);
 
-    var height= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    function resizeChart(){
+      var tooltip = d3.select("chart").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0);
 
-    // Create an SVG Path
-    var svg = d3.select(".chart").append("svg")
-    .attr("height", height)
-    .attr("width", width);
+      var height= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-    //  Append a group called g
-    var chartGroup = svg.append("g").attr("transform", "translate(260, 100)");
+      // Create an SVG Path
+      var svg = d3.select(".chart").append("svg")
+      .attr("height", height)
+      .attr("width", width);
 
-     // Create d3 line generator
-     // d = Path = "Mx,y Lx,y Lx,y Lx,y Lx,y Lx,y"
-     // M = move to
-     // L = Line to
-     line = d3.line()
-          .x(function(d, i){return d.x*60;})
-          .y(function(d, i){return d.y*5;})
-          .curve(d3.curveCardinal);
+      //  Append a group called g
+      var chartGroup = svg.append("g").attr("transform", "translate(260, 100)");
 
-     //  Create d3 line generator
-     lineTwo = d3.line()
-          .x(function(d, i){return d.x*60;})
-          .y(function(d, i){return d.y*5;})
-          .curve(d3.curveCardinal);
+       // Create d3 line generator
+       // d = Path = "Mx,y Lx,y Lx,y Lx,y Lx,y Lx,y"
+       // M = move to
+       // L = Line to
+       line = d3.line()
+            .x(function(d, i){return d.x*60;})
+            .y(function(d, i){return d.y*5;})
+            .curve(d3.curveCardinal);
 
-
-    // Execute the Path line
-    chartGroup.append("path")
-          .attr("fill", "none")
-          .attr("stroke", "#007acc")
-          .attr("d", line(formattedDataArrayLows))
-          .attr("transform", "translate(-200,-100)");
-
-    // Execute the Path line
-    chartGroup.append("path")
-          .attr("fill", "none")
-          .attr("stroke", "#00cc00")
-          .attr("d", lineTwo(formattedDataArrayHighs))
-          .attr("transform", "translate(-200,-100)");
-
-    // ---------------------------------- SVG CIRCLE NODES AND TOOLTIP EVENT
+       //  Create d3 line generator
+       lineTwo = d3.line()
+            .x(function(d, i){return d.x*60;})
+            .y(function(d, i){return d.y*5;})
+            .curve(d3.curveCardinal);
 
 
-    // Circular  Nodes on path
-    chartGroup.selectAll("circle.first")
-           // binds data to elements
-          .data(formattedDataArrayLows)
-           // compares the data we have on the page with our source data
-         .enter().append("circle")
-                .style("fill", "#007acc")
-                .attr("class", "first")
-                .attr("cx", function(d, i){return d.x*60;})
-                .attr("cy", function(d, i){return d.y*5;})
-                .attr("r", 5)
-                .attr("transform", "translate(-200,-100)");
-                chartGroup.selectAll("circle.first")
-                      .data(weatherData)
-                      .on("mouseover", function(d) {
-                                tooltip
-                               .text(d.day + ", "+ d.low +", " + d.text)
-                               .style("opacity", 1)
-                               .style("left", (d3.event.pageX) + "px")
-                               .style("top", (d3.event.pageY - 28) + "px");})
+      // Execute the Path line
+      chartGroup.append("path")
+            .attr("fill", "none")
+            .attr("stroke", "#007acc")
+            .attr("d", line(formattedDataArrayLows))
+            .attr("transform", "translate(-200,-100)");
 
-                     .on("mouseout", function(d) {
-                       tooltip
-                       .style("opacity", 0)
-                        //  // console.log(d);
-                      });
+      // Execute the Path line
+      chartGroup.append("path")
+            .attr("fill", "none")
+            .attr("stroke", "#00cc00")
+            .attr("d", lineTwo(formattedDataArrayHighs))
+            .attr("transform", "translate(-200,-100)");
 
 
-    // Circular  Nodes on path
-    chartGroup.selectAll("circle.second")
-         // binds data to elements
-         .data(formattedDataArrayHighs)
-         // compares the data we have on the page with our source data
-         .enter().append("circle")
-                .style("fill", "#00cc00")
-                .attr("class", "second")
-                .attr("cx", function(d, i){return d.x*60;})
-                .attr("cy", function(d, i){return d.y*5;})
-                .attr("r", 5)
-                .attr("transform", "translate(-200,-100)");
-                chartGroup.selectAll("circle.second")
-                      .data(weatherData)
-                      .on("mouseover", function(d) {
-                                tooltip
-                               .text(d.day + ", "+ d.high +", " + d.text)
-                               .style("opacity", 1)
-                               .style("left", (d3.event.pageX) + "px")
-                               .style("top", (d3.event.pageY - 28) + "px")
-                             })
+      // ---------------------------------- SVG CIRCLE NODES AND TOOLTIP EVENT
 
-                     .on("mouseout", function(d) {
-                       tooltip
+      // Green is high temperature
+      chartGroup.append("circle")
+                  .style("fill", "#007acc")
+                  .attr("class", "example")
+                  .attr("cx",360)
+                  .attr("cy",-50)
+                  .attr("r", 5);
+                  
+      chartGroup.append("text")
+                   .attr("class", "text")
+                   .attr("x", 280)
+                   .attr("y", -70)
+                   .text("Highs");
+
+      // Blue is low temperature
+      chartGroup.append("circle")
+                  .style("fill", "#00cc00")
+                  .attr("class", "example")
+                  .attr("cx", 300)
+                  .attr("cy",-50)
+                  .attr("r", 5);
+
+     chartGroup.append("text")
+                  .attr("class", "text")
+                  .attr("x", 340)
+                  .attr("y", -70)
+                  .text("Lows");
+
+      // Circular  Nodes on path
+      chartGroup.selectAll("circle.first")
+             // binds data to elements
+            .data(formattedDataArrayLows)
+             // compares the data we have on the page with our source data
+           .enter().append("circle")
+                  .style("fill", "#007acc")
+                  .attr("class", "first")
+                  .attr("cx", function(d, i){return d.x*60;})
+                  .attr("cy", function(d, i){return d.y*5;})
+                  .attr("r", 5)
+                  .attr("transform", "translate(-200,-100)");
+                  chartGroup.selectAll("circle.first")
+                        .data(weatherData)
+                        .on("mouseover", function(d) {
+                                  tooltip
+                                 .text(d.day + ", "+ d.low +", " + d.text)
+                                 .style("opacity", 1)
+                                 .style("left", (d3.event.pageX) + "px")
+                                 .style("top", (d3.event.pageY - 28) + "px");})
+
+                       .on("mouseout", function(d) {
+                         tooltip
                          .style("opacity", 0)
-                        //  // console.log(d);
-                      });
+                        });
 
-    // ---------------------------------- X AXIS Y AXIS SCALE
 
-    // Scale bars
-    var y = d3.scaleLinear()
-          .domain([0, 100])
-          .range([400,40]);
+      // Circular  Nodes on path
+      chartGroup.selectAll("circle.second")
+           // binds data to elements
+           .data(formattedDataArrayHighs)
+           // compares the data we have on the page with our source data
+           .enter().append("circle")
+                  .style("fill", "#00cc00")
+                  .attr("class", "second")
+                  .attr("cx", function(d, i){return d.x*60;})
+                  .attr("cy", function(d, i){return d.y*5;})
+                  .attr("r", 5)
+                  .attr("transform", "translate(-200,-100)");
+                  chartGroup.selectAll("circle.second")
+                        .data(weatherData)
+                        .on("mouseover", function(d) {
+                                  tooltip
+                                 .text(d.day + ", "+ d.high +", " + d.text)
+                                 .style("opacity", 1)
+                                 .style("left", (d3.event.pageX) + "px")
+                                 .style("top", (d3.event.pageY - 28) + "px")
+                               })
 
-    var x = d3.scalePoint()
-          .domain(updateToCurrentDay(days))
-          .range([0, 360])
+                       .on("mouseout", function(d) {
+                         tooltip
+                           .style("opacity", 0)
+                        });
 
-    var yAxis = d3.axisLeft(y);
-    var xAxis = d3.axisBottom(x);
+      // ---------------------------------- X AXIS Y AXIS SCALE
 
-    // display the day on chart matching today as the to current day
-    function updateToCurrentDay(daysOfTheWeek){
-        var currentDay = new Date().toString().substring(0,3);
-        for(let i=0; i<days.length; i++) {
-          if(daysOfTheWeek[i]==currentDay){
-            daysOfTheWeek[i] = "Today";
+      // Scale bars
+      var y = d3.scaleLinear()
+            .domain([0, 100])
+            .range([400,40]);
+
+      var x = d3.scalePoint()
+            .domain(updateToCurrentDay(days))
+            .range([0, 360])
+
+      var yAxis = d3.axisLeft(y);
+      var xAxis = d3.axisBottom(x);
+
+      // display the day on chart matching today as the to current day
+      function updateToCurrentDay(daysOfTheWeek){
+          var currentDay = new Date().toString().substring(0,3);
+          for(let i=0; i<days.length; i++) {
+            if(daysOfTheWeek[i]==currentDay){
+              daysOfTheWeek[i] = "Today";
+            }
           }
-        }
-        return daysOfTheWeek;
-    }
-
-    // ---------------------------------- GROUPS
-
-    // chartGroup.append("path").attr("d", line(lows))
-    svg.append("g")
-            .attr("class", "axis y")
-            .attr("transform", "translate(60, 0)")
-            .call(yAxis);
-
-    svg.append("g")
-            .attr("class", "axis x")
-            .attr("transform", "translate(60, 400)")
-            .call(xAxis);
-          }
-          d3.select(window).on("resize", resizeChart());
-        }
+          return daysOfTheWeek;
       }
 
-      console.log(window.innerWidth);
+      // --------------------------------------- GROUPS
 
+      // chartGroup.append("path").attr("d", line(lows))
+      svg.append("g")
+              .attr("class", "axis y")
+              .attr("transform", "translate(60, 0)")
+              .call(yAxis);
+
+      svg.append("g")
+              .attr("class", "axis x")
+              .attr("transform", "translate(60, 400)")
+              .call(xAxis);
+      }
+          d3.select(window).on("resize", resizeChart());
+    }
   }
+}
 
-  // --------------------------------------------- Form Interactivity
-
-  // function getEvent(action, string, input){
-  //   input.addEventListener(action, function(event){
-  //     if (action){
-  //       input.value = string;
-  //     }
-  //   }, false);
-  // }
-  //
-  // var input = document.getElementById('zip');
-  // getEvent("focus", " ", input);
-  // getEvent("blur", " ", input);
-
-
-  // $scope.$watch(function(){
-  //   return vm.input;
-  // }, function(newVal, oldVal){
-  //   console.log('value updated')
-  // });
-
-
-  angular
-      .module('weatherApp')
-      .controller('WeatherController', WeatherController);
+angular
+    .module('weatherApp')
+    .controller('WeatherController', WeatherController);

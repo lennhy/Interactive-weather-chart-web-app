@@ -8,14 +8,17 @@
     <title>Front End Master Test</title>
   </head>
   <body>
+    <!-- Start of navigation bar  -->
     <nav class="navbar navbar">
       <a class="navbar-brand">Rain</a>
-      <!-- <span>{{vm.message}}</span> -->
 
+      <!-- Start of form  -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <form name="form" class="form-inline" ng-submit="vm.submitLocal(vm.input)">
+
           <label for="zip">Enter zip code or City and State or Country</label>
+
           <input type="text" name="zip" id="zip" class="form-control" ng-model="vm.input"  minlength="5" local="required" required="required">
 
           <button class="btn btn-outline" type="submit">Submit</button>
@@ -27,13 +30,18 @@
           </div>
 
         </form>
+        <!-- End of form  -->
+        
       </div>
     </nav>
+    <!--  End of navigation bar-->
     <span class="message">"{{vm.message}}"</span>
 
     <div class="jumbotron"><h2>{{vm.currentWeather.item.title}}</h2></div>
 
     <div class="container">
+
+      <!--Chart directive element-->
       <chart></chart>
       <div class="row">
         <div class="col-md-12">
@@ -53,6 +61,7 @@
 
       <div class="row">
         <div class="col-md-12">
+          <!-- Hidden div element  -->
           <button type="button" class="btn btn-secondary" id="more-data" ng-click="vm.toggle()">Show More</button>
             <ul class="list-group" id="more-data-container" ng-class="{active:vm.showMore}">
               <li class="list-group-item">Wind Speed: {{vm.currentWeather.wind.speed}}</li>
