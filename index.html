@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="assets/css/custom-style.css">
-    <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <title>Front End Master Test</title>
   </head>
   <body>
@@ -31,12 +32,27 @@
 
         </form>
         <!-- End of form  -->
-        
+
       </div>
     </nav>
     <!--  End of navigation bar-->
-    <span class="message">"{{vm.message}}"</span>
+    <div class="mobile-display">
+      <form name="form" class="form-inline" ng-submit="vm.submitLocal(vm.input)">
 
+        <label for="zip">Enter zip code or City and State or Country</label>
+
+        <input type="text" name="zip" id="zip" class="form-control" ng-model="vm.input"  minlength="5" local="required" required="required">
+
+        <button class="btn btn-outline" type="submit">Submit</button>
+
+        <div ng-messages="form.zip.$error" ng-if="form.email.$touched">
+          <div ng-message="local">type a 5 digit zip code or a city and state separated by a comma!</div>
+          <div ng-message="required">You need to type in something before you submit!</div>
+          <div ng-message="minlenght">You didn't enter enough information!</div>
+        </div>
+
+      </form>
+    </div>
     <div class="jumbotron"><h2>{{vm.currentWeather.item.title}}</h2></div>
 
     <div class="container">
