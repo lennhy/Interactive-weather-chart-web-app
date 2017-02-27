@@ -10,17 +10,31 @@
   <body>
     <nav class="navbar navbar">
       <a class="navbar-brand">Rain</a>
+      <!-- <span>{{vm.message}}</span> -->
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form class="form-inline" ng-submit="vm.submitLocal(vm.input)">
-          <input type="text" id="zip" class="form-control" name="vm.input" ng-model="vm.input" placeholder="Type Zip Code:">
+
+        <form name="form" class="form-inline" ng-submit="vm.submitLocal(vm.input)">
+          <label for="zip">Enter zip code or City and State or Country</label>
+          <input type="text" name="zip" id="zip" class="form-control" ng-model="vm.input"  minlength="5" local="required" required="required">
+
           <button class="btn btn-outline" type="submit">Submit</button>
+
+          <div ng-messages="form.zip.$error" ng-if="form.email.$touched">
+            <div ng-message="local">type a 5 digit zip code or a city and state separated by a comma!</div>
+            <div ng-message="required">You need to type in something before you submit!</div>
+            <div ng-message="minlenght">You didn't enter enough information!</div>
+          </div>
+
         </form>
       </div>
     </nav>
+    <span class="message">"{{vm.message}}"</span>
+
     <div class="jumbotron"><h2>{{vm.currentWeather.item.title}}</h2></div>
-    <chart></chart>
 
     <div class="container">
+      <chart></chart>
       <div class="row">
         <div class="col-md-12">
         </div>
@@ -53,6 +67,7 @@
 
     </div>
     <script src="js/angular.min.js"></script>
+    <script src="js/angular-messages.js"></script>
     <script src="js/app/weatherApp.js"></script>
     <script src="js/d3.js"></script>
     <script src="js/app/controllers/WeatherController.js"></script>

@@ -1,4 +1,4 @@
-function WeatherController(WeatherService) {
+function WeatherController(WeatherService, $scope) {
   var vm = this;
   var url;
   vm.input = "newyork, us";
@@ -6,40 +6,26 @@ function WeatherController(WeatherService) {
   // Change the input value when user types in a zip code
   vm.submitLocal = function(input){
     d3.select(".chart").selectAll("svg").remove();
-    var svg = d3.select(".chart").append("svg")
     vm.input = input;
     url = `http://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`;
     start();
   }
 
-  function getEvent(action, string, input){
-    input.addEventListener(action, function(event){
-      if (action){
-        input.value = string;
-      }
-    }, false);
-  }
-
-
-  var input = document.getElementById('zip');
-  getEvent("focus", " ", input);
-  getEvent("blur",  "Enter Zip code or City, Country....", input);
-
-
   // when window loads default location to new york
   Window.onload = start();
-  vm.input = "Enter Zip code or City, Country...."
+  vm.input = " "
   function start(){
     url = `http://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`
     WeatherService
     .httpGetWeatherByState(url)
       .then(function (obj){
         // // console.log(obj.data);
-        vm.currentWeather =  obj.data.query.results.channel;
-        vm.weatherForcast = obj.data.query.results.channel.item.forecast;
-        returnData(vm.weatherForcast);
-        // console.log(vm.weatherForcast);
-
+        if(obj !== null){
+          vm.currentWeather =  obj.data.query.results.channel;
+          vm.weatherForcast = obj.data.query.results.channel.item.forecast;
+          returnData(vm.weatherForcast);
+          // console.log(vm.weatherForcast);
+        }
       });
       let moreData= document.getElementById("more-data-container");
       moreData.style.display = "";
@@ -50,11 +36,8 @@ function WeatherController(WeatherService) {
       vm.showMore = !vm.showMore;
     }
 
-    var height= 500;
-    var width = 360;
     var formattedDataArrayLows =[];
     var formattedDataArrayHighs=[];
-    var margin = {left:0, right:260, top:-120, bottom:0};
 
     // --------------------------PREP DATA
 
@@ -101,11 +84,18 @@ function WeatherController(WeatherService) {
         console.log(formattedDataArrayHighs);
 
     // ---------------------------------- CREATE CHART PATH GENERATOR
+function resizeChart(){
+    var tooltip = d3.select("chart").append("div")
+                  .attr("class", "tooltip")
+                  .style("opacity", 0);
+
+    var height= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
     // Create an SVG Path
     var svg = d3.select(".chart").append("svg")
-    .attr("height", "100%")
-    .attr("width","100%");
+    .attr("height", height)
+    .attr("width", width);
 
     //  Append a group called g
     var chartGroup = svg.append("g").attr("transform", "translate(260, 100)");
@@ -131,20 +121,18 @@ function WeatherController(WeatherService) {
           .attr("fill", "none")
           .attr("stroke", "#007acc")
           .attr("d", line(formattedDataArrayLows))
-          .attr("transform", "translate("+margin.left+","+margin.top+")");
+          .attr("transform", "translate(-200,-100)");
 
     // Execute the Path line
     chartGroup.append("path")
           .attr("fill", "none")
           .attr("stroke", "#00cc00")
           .attr("d", lineTwo(formattedDataArrayHighs))
-          .attr("transform", "translate(0,-230)");
+          .attr("transform", "translate(-200,-100)");
 
     // ---------------------------------- SVG CIRCLE NODES AND TOOLTIP EVENT
 
-    var tooltip = d3.select("chart").append("div")
-                  .attr("class", "tooltip")
-                  .style("opacity", 0);
+
     // Circular  Nodes on path
     chartGroup.selectAll("circle.first")
            // binds data to elements
@@ -156,7 +144,7 @@ function WeatherController(WeatherService) {
                 .attr("cx", function(d, i){return d.x*60;})
                 .attr("cy", function(d, i){return d.y*5;})
                 .attr("r", 5)
-                .attr("transform", "translate("+margin.left+","+margin.top+")")
+                .attr("transform", "translate(-200,-100)");
                 chartGroup.selectAll("circle.first")
                       .data(weatherData)
                       .on("mouseover", function(d) {
@@ -184,7 +172,7 @@ function WeatherController(WeatherService) {
                 .attr("cx", function(d, i){return d.x*60;})
                 .attr("cy", function(d, i){return d.y*5;})
                 .attr("r", 5)
-                .attr("transform", "translate(0,-230)");
+                .attr("transform", "translate(-200,-100)");
                 chartGroup.selectAll("circle.second")
                       .data(weatherData)
                       .on("mouseover", function(d) {
@@ -206,11 +194,11 @@ function WeatherController(WeatherService) {
     // Scale bars
     var y = d3.scaleLinear()
           .domain([0, 100])
-          .range([height,0]);
+          .range([400,40]);
 
     var x = d3.scalePoint()
           .domain(updateToCurrentDay(days))
-          .range([0, width])
+          .range([0, 360])
 
     var yAxis = d3.axisLeft(y);
     var xAxis = d3.axisBottom(x);
@@ -231,16 +219,43 @@ function WeatherController(WeatherService) {
     // chartGroup.append("path").attr("d", line(lows))
     svg.append("g")
             .attr("class", "axis y")
-            .attr("transform", "translate(260, 0)")
+            .attr("transform", "translate(60, 0)")
             .call(yAxis);
 
     svg.append("g")
             .attr("class", "axis x")
-            .attr("transform", "translate(260, 500)")
+            .attr("transform", "translate(60, 400)")
             .call(xAxis);
           }
+          d3.select(window).on("resize", resizeChart());
+        }
       }
+
+      console.log(window.innerWidth);
+
   }
+
+  // --------------------------------------------- Form Interactivity
+
+  // function getEvent(action, string, input){
+  //   input.addEventListener(action, function(event){
+  //     if (action){
+  //       input.value = string;
+  //     }
+  //   }, false);
+  // }
+  //
+  // var input = document.getElementById('zip');
+  // getEvent("focus", " ", input);
+  // getEvent("blur", " ", input);
+
+
+  // $scope.$watch(function(){
+  //   return vm.input;
+  // }, function(newVal, oldVal){
+  //   console.log('value updated')
+  // });
+
 
   angular
       .module('weatherApp')
