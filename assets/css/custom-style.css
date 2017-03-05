@@ -9,7 +9,7 @@ body{
    font-family: 'Roboto', sans-serif;
    letter-spacing: .05em;
 }
-/*text*/
+/*text &*/
 text.text{
   stroke: #ea4c89;
   stroke-width: .5;
