@@ -80,6 +80,7 @@ h2{
 
 
 /*--------------------------------TEXT */
+
 label{
   color:#fff;
 }
@@ -144,6 +145,7 @@ button.btn-secondary:hover{
   color: #fff;
   border: none;
 }
+
 /*------------------------------CHART----------------------*/
 
 .chart svg{
@@ -209,8 +211,18 @@ span.message{
   display: inline-block;
 }
 
-
 ul.active#more-data-container{display: block;}
+
+div#error-message{
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  background: #e44235;
+  display: none;
+  color: #fff;
+  font-size: 1em;
+  text-align: center;
+}
 
 /*=========================================================STOP*/
 @media only screen and (max-width: 500px) {
@@ -249,3 +261,5 @@ ul li.list-group-item, .jumbotron h2{
 .navbar-brand{
   margin: 0;
 }
+
+/*-------------------------------------MESSAGES*/

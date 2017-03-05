@@ -20,14 +20,15 @@ function WeatherController(WeatherService, $scope) {
     WeatherService
     .httpGetWeatherByState(url)
       .then(function (obj){
-          if(obj !== null){
-            console.log(obj.statusText);
-            console.log(obj.data.query.results);
+          if(obj === null || obj === undefined){
+            let el = document.getElementById("error-message");
+            el.innerHTML = "Something went wrong! Try reloading the page.";
+            el.style.display = "block";
+          }
+          if(obj.data.query.results !== null || obj !== undefined){
             vm.currentWeather =  obj.data.query.results.channel;
             vm.weatherForcast = obj.data.query.results.channel.item.forecast;
             returnData(vm.weatherForcast);
-          }else{
-            console.log(obj);
           }
       }, function error(err){
           console.log(err);
@@ -56,7 +57,6 @@ function WeatherController(WeatherService, $scope) {
         var highs =[];
         var dates =[];
         var days =[];
-        console.log(weatherData);
 
         var lows = weatherData.map((e,i)=>{  return 100 - Number(e.low);})
         var highs = weatherData.map((e,i)=>{  return 100 - Number(e.high);})
@@ -77,8 +77,6 @@ function WeatherController(WeatherService, $scope) {
 
       });
 
-      // console.log(formattedDataArrayHighs);
-
 
     // ---------------------------------- CREATE CHART PATH GENERATOR
 
@@ -98,43 +96,41 @@ function WeatherController(WeatherService, $scope) {
       //  Append a group called g
       var chartGroup = svg.append("g").attr("transform", "translate(260, 100)");
 
+      // ---------------------------------------LINE PATHS
        // Create d3 line generator
        // d = Path = "Mx,y Lx,y Lx,y Lx,y Lx,y Lx,y"
        // M = move to
        // L = Line to
-      //  lows
+       //  lows
        line = d3.line()
-            .x(function(d, i){console.log(d.y);return d.x*60;})
+            .x(function(d, i){;return d.x*60;})
             .y(function(d, i){return d.y*5;})
             .curve(d3.curveCardinal);
 
        //  Create d3 line generator
-      //  highs
+       //  highs
        lineTwo = d3.line()
             .x(function(d, i){return d.x*60;})
             .y(function(d, i){return d.y*5;})
             .curve(d3.curveCardinal);
 
 
-      // Execute the Path line
+      // Execute the Path line for lows
       chartGroup.append("path")
             .attr("fill", "none")
             .attr("stroke", "#007acc")
             .attr("d", line(formattedDataArrayLows))
-            .attr("transform", "translate(-200,-100)");
+            .attr("transform", "translate(-200,-170)");
 
-      // Execute the Path line
+      // Execute the Path line for highs
       chartGroup.append("path")
             .attr("fill", "none")
             .attr("stroke", "#00cc00")
             .attr("d", lineTwo(formattedDataArrayHighs))
-            .attr("transform", "translate(-200,-100)");
+            .attr("transform", "translate(-200,-150)");
 
 
 
-// function convert(val){
-//
-// }
       // ---------------------------------- SVG CIRCLE NODES AND TOOLTIP EVENT
 
       // Green is high temperature
@@ -166,7 +162,6 @@ function WeatherController(WeatherService, $scope) {
                   .text("Lows");
 
       // Circular  Nodes on path
-      console.log("-----------------");
       chartGroup.selectAll("circle.first")
              // binds data to elements
             .data(formattedDataArrayLows)
@@ -177,7 +172,7 @@ function WeatherController(WeatherService, $scope) {
                   .attr("cx", function(d, i){return d.x*60;})
                   .attr("cy", function(d, i){console.log(d.y*5);return d.y*5;})
                   .attr("r", 5)
-                  .attr("transform", "translate(-200,-100)");
+                  .attr("transform", "translate(-200,-170)");
                   chartGroup.selectAll("circle.first")
                         .data(weatherData)
                         .on("mouseover", function(d) {
@@ -204,7 +199,7 @@ function WeatherController(WeatherService, $scope) {
                   .attr("cx", function(d, i){return d.x*60;})
                   .attr("cy", function(d, i){return d.y*5;})
                   .attr("r", 5)
-                  .attr("transform", "translate(-200,-100)");
+                  .attr("transform", "translate(-200,-150)");
                   chartGroup.selectAll("circle.second")
                         .data(weatherData)
                         .on("mouseover", function(d) {
