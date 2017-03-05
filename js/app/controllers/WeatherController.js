@@ -13,7 +13,6 @@ function WeatherController(WeatherService, $scope) {
 
   // When window loads default location to new york
   Window.onload = start();
-
   vm.input = " "
 
   function start(){
@@ -21,12 +20,18 @@ function WeatherController(WeatherService, $scope) {
     WeatherService
     .httpGetWeatherByState(url)
       .then(function (obj){
-        if(obj !== null){
-          vm.currentWeather =  obj.data.query.results.channel;
-          vm.weatherForcast = obj.data.query.results.channel.item.forecast;
-          returnData(vm.weatherForcast);
-        }
-      });
+          if(obj !== null){
+            console.log(obj.statusText);
+            console.log(obj.data.query.results);
+            vm.currentWeather =  obj.data.query.results.channel;
+            vm.weatherForcast = obj.data.query.results.channel.item.forecast;
+            returnData(vm.weatherForcast);
+          }else{
+            console.log(obj);
+          }
+      }, function error(err){
+          console.log(err);
+    });
 
       let moreData= document.getElementById("more-data-container");
       moreData.style.display = "";
@@ -47,29 +52,19 @@ function WeatherController(WeatherService, $scope) {
     function returnData(weatherData){
       weatherData.splice(7,3);
 
-        var lows =[];
+        // var lows =[];
         var highs =[];
         var dates =[];
         var days =[];
+        console.log(weatherData);
 
-        weatherData.map(function(x,i){
-            // Low temperatures
-            let lowTemp = parseInt(x.low)
-            lows.push(lowTemp);
-            lows.sort();
+        var lows = weatherData.map((e,i)=>{  return 100 - Number(e.low);})
+        var highs = weatherData.map((e,i)=>{  return 100 - Number(e.high);})
 
-            // High temperatures numbers array
-            let highTemp = parseInt(x.high)
-            highs.push(highTemp);
-            highs.sort();
-
-            // Date numbers array
-            date = parseInt(x.date);
-            dates.push(date);
-            dates.sort();
-
+        // console.log(newWeather)
+        weatherData.forEach(function(x,i){
             // Organize all Data accordingly to be displayed on the chart
-            let obj = {x:i, y:parseInt(x.low)}
+            let obj = {x:i,y:lows[i]}
             formattedDataArrayLows.push(obj);
 
             // Days array
@@ -77,12 +72,12 @@ function WeatherController(WeatherService, $scope) {
             days.push(day);
 
             // Organize all Data accordingly to be displayed on the chart
-            obj = {x:i, y:parseInt(x.high)}
+            obj = {x:i, y:highs[i]}
             formattedDataArrayHighs.push(obj);
 
       });
 
-      console.log(formattedDataArrayHighs);
+      // console.log(formattedDataArrayHighs);
 
 
     // ---------------------------------- CREATE CHART PATH GENERATOR
@@ -107,12 +102,14 @@ function WeatherController(WeatherService, $scope) {
        // d = Path = "Mx,y Lx,y Lx,y Lx,y Lx,y Lx,y"
        // M = move to
        // L = Line to
+      //  lows
        line = d3.line()
-            .x(function(d, i){return d.x*60;})
+            .x(function(d, i){console.log(d.y);return d.x*60;})
             .y(function(d, i){return d.y*5;})
             .curve(d3.curveCardinal);
 
        //  Create d3 line generator
+      //  highs
        lineTwo = d3.line()
             .x(function(d, i){return d.x*60;})
             .y(function(d, i){return d.y*5;})
@@ -134,6 +131,10 @@ function WeatherController(WeatherService, $scope) {
             .attr("transform", "translate(-200,-100)");
 
 
+
+// function convert(val){
+//
+// }
       // ---------------------------------- SVG CIRCLE NODES AND TOOLTIP EVENT
 
       // Green is high temperature
@@ -165,6 +166,7 @@ function WeatherController(WeatherService, $scope) {
                   .text("Lows");
 
       // Circular  Nodes on path
+      console.log("-----------------");
       chartGroup.selectAll("circle.first")
              // binds data to elements
             .data(formattedDataArrayLows)
@@ -173,7 +175,7 @@ function WeatherController(WeatherService, $scope) {
                   .style("fill", "#007acc")
                   .attr("class", "first")
                   .attr("cx", function(d, i){return d.x*60;})
-                  .attr("cy", function(d, i){return d.y*5;})
+                  .attr("cy", function(d, i){console.log(d.y*5);return d.y*5;})
                   .attr("r", 5)
                   .attr("transform", "translate(-200,-100)");
                   chartGroup.selectAll("circle.first")

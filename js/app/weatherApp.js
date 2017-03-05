@@ -1,4 +1,5 @@
 (function() {
+  'use strict';
   angular
         .module('weatherApp', ['ngMessages'])
         .config(function apply($httpProvider, $compileProvider){
