@@ -7,7 +7,7 @@ function WeatherController(WeatherService, $scope) {
   vm.submitLocal = function(input){
     d3.select(".chart").selectAll("svg").remove();
     vm.input = input;
-    url = `query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`;
+    url = `//query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`;
     start();
   }
 
@@ -16,7 +16,7 @@ function WeatherController(WeatherService, $scope) {
   vm.input = " "
 
   function start(){
-    url = `query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`
+    url = `//query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${vm.input}")&format=json`
     WeatherService
     .httpGetWeatherByState(url)
       .then(function (obj){
