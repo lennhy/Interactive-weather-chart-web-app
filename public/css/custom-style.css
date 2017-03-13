@@ -32,7 +32,7 @@ text.text{
 
 h2{
   padding: 10px 0 30px 30px;
-  margin-left: 60px;
+  /*margin-left: 60px;*/
 
 }
 
@@ -234,7 +234,12 @@ div#error-message{
     text-align: center;
     width: 100%;
   }
-
+  .jumbotron {
+    width: 0 auto;
+    text-align: center;
+    /*width: 100px;*/
+    padding:20px;
+  }
    .axis path, axis line{
      position: relative;
     height: 0;
@@ -243,7 +248,7 @@ div#error-message{
     padding-bottom: 100%;
   }
 
-  ul li.list-group-item, .jumbotron h2{
+  ul li.list-group-item{
     width: 100%;
     margin: 0 auto;
     text-align: center;
@@ -255,9 +260,10 @@ div#error-message{
     height: 60px;
     margin-top: 20px;
     margin-bottom: 20px;
-
     /*background-color: #3763ad;*/
-
+  }
+  .chart svg{
+    overflow: auto;
   }
   .mobile-display{
     display: block;
