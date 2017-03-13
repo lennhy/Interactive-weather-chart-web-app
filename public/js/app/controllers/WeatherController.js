@@ -81,6 +81,7 @@ function WeatherController(WeatherService, $scope) {
     // ---------------------------------- CREATE CHART PATH GENERATOR
 
     function resizeChart(){
+      window.addEventListener('resize', svg.render);
       var tooltip = d3.select("chart").append("div")
                     .attr("class", "tooltip")
                     .style("opacity", 0);
